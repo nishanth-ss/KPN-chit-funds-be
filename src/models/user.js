@@ -3,9 +3,16 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     phoneNo: {
+        type: Number,
+        required: true,
+        unique: true,
+        trim: true
+    },
+    chitNo: {
         type: Number,
         required: true,
         unique: true
@@ -22,7 +29,50 @@ const userSchema = new mongoose.Schema({
     roles:{
         type: String,
         enum: ["admin","user"],
-        required: true
+        default: "user"
+    },
+    // Track amount update history
+    amountHistory: [{
+        amount: {
+            type: Number,
+            required: true
+        },
+        updatedAt: {
+            type: Date,
+            default: Date.now
+        },
+        updatedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    }],
+    // Track selection history
+    selectionHistory: [{
+        selectedAt: {
+            type: Date,
+            default: Date.now
+        },
+        selectedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        selectionRound: {
+            type: Number,
+            required: true
+        }
+    }],
+    // Track last amount update
+    lastAmountUpdate: {
+        type: Date
+    },
+    // Track last selection
+    lastSelectionDate: {
+        type: Date
+    },
+    // Track total times selected
+    totalSelections: {
+        type: Number,
+        default: 0
     }
 
 }, { timestamps: true });
