@@ -3,9 +3,15 @@ const dotenv = require("dotenv");
 dotenv.config();
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
+const cors = require("cors");
 
 connectDB();
-
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Vite frontend
+    credentials: true,
+  })
+);
 const app = express();
 
 const PORT = process.env.PORT || 3001;

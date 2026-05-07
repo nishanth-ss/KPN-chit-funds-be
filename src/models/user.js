@@ -19,6 +19,11 @@ const userSchema = new mongoose.Schema({
         enum: ["Pending", "Selected", "Rejected"],
         default: "Pending"
     },
+    roles:{
+        type: String,
+        enum: ["admin","user"],
+        required: true
+    }
 
 }, { timestamps: true });
 
