@@ -13,7 +13,8 @@ app.use(
       // Allow requests from any origin
       const allowedOrigins = [
         "http://localhost:5173",
-        "https://kattapai-chit-fund.onrender.com"
+        "https://kattapai-chit-fund.onrender.com",
+        "https://kpn-chit-funds-fe-1.onrender.com"
       ];
       
       // Allow requests with no origin (like mobile apps or Postman)
