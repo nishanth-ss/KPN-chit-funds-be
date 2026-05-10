@@ -12,7 +12,7 @@ router.delete("/:id", protect, authorize('admin'), deleteUser);
 // Protected routes (any authenticated user)
 router.get("/", protect, getAllUsers);
 router.get("/:id", protect, getUserById);
-router.get("/:id/history", protect, authorize('admin'), getUserWithHistory);
+router.get("/:id/history", getUserWithHistory); // Public endpoint - no auth required
 router.post("/pick-random", protect, authorize('admin'), pickRandomUser);
 
 module.exports = router;
