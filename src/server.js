@@ -9,7 +9,10 @@ const app = express();
 connectDB();
 app.use(
   cors({
-    origin: "http://localhost:5173", // Vite frontend
+    origin: [
+      "http://localhost:5173", // Vite frontend
+      "https://kattapai-chit-fund.onrender.com"
+    ].filter(Boolean),
     credentials: true,
   })
 );

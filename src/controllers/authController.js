@@ -19,7 +19,7 @@ exports.signinUser = async (req, res) => {
         const { phoneNo, password } = req.body;
 
         // Validate input
-        if (!phoneNo || password !== "1234" ) {
+        if (!phoneNo || !password) {
             return res.status(400).json({
                 message: 'Please provide phone number and password'
             });
@@ -27,19 +27,26 @@ exports.signinUser = async (req, res) => {
 
         // Check if user exists
         const user = await User.findOne({ phoneNo });
+
         if (!user) {
             return res.status(401).json({
                 message: 'Invalid credentials'
             });
         }
 
-        // Check if password matches
-        // const isMatch = await user.comparePassword(password);
-        // if (!isMatch) {
-        //     return res.status(401).json({
-        //         message: 'Invalid credentials'
-        //     });
-        // }
+        // Admin login check
+        if (
+            phoneNo === "8940891631" &&
+            password !== "Default!ng@1"
+        ) {
+            return res.status(401).json({
+                message: 'Invalid password'
+            });
+        }else if(password !== "1234") {
+            return res.status(401).json({
+                message: 'Invalid password'
+            });
+        }
 
         // Generate token
         const token = generateToken(user._id);
@@ -60,8 +67,9 @@ exports.signinUser = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ 
-            message: error.message 
+
+        res.status(500).json({
+            message: error.message
         });
     }
 };
