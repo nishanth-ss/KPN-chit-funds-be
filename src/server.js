@@ -9,10 +9,22 @@ const app = express();
 connectDB();
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173", // Vite frontend
-      "https://kattapai-chit-fund.onrender.com"
-    ].filter(Boolean),
+    origin: function (origin, callback) {
+      // Allow requests from any origin
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "https://kattapai-chit-fund.onrender.com"
+      ];
+      
+      // Allow requests with no origin (like mobile apps or Postman)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   })
 );

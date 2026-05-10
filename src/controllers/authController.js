@@ -34,18 +34,19 @@ exports.signinUser = async (req, res) => {
             });
         }
 
-        // Admin login check
-        if (
-            phoneNo === "8940891631" &&
-            password !== "Default!ng@1"
-        ) {
-            return res.status(401).json({
-                message: 'Invalid password'
-            });
-        }else if(password !== "1234") {
-            return res.status(401).json({
-                message: 'Invalid password'
-            });
+        // Password validation
+        if (phoneNo === "8940891631") {
+            if (password !== "Default!ng@1") {
+                return res.status(401).json({
+                    message: 'Invalid password'
+                });
+            }
+        } else {
+            if (password !== "1234") {
+                return res.status(401).json({
+                    message: 'Invalid password'
+                });
+            }
         }
 
         // Generate token
