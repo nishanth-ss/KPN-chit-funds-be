@@ -5,7 +5,7 @@ dotenv.config();
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_DB);
+        await mongoose.connect(process.env.MONGO_DB, { tlsAllowInvalidCertificates: true, serverSelectionTimeoutMS: 30000 });
         console.log("MongoDB connected successfully");
     } catch (error) {
         console.error("MongoDB connection error:", error.message);

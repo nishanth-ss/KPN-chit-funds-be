@@ -108,12 +108,42 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
+const ChitCycleHistory = require('../models/ChitCycleHistory');
+
 exports.pickRandomUser = async (req, res) => {
     try {
         const pendingUsers = await User.find({ status: "Pending" });
         if (pendingUsers.length === 0) {
-            return res.status(400).json({
-                message: "No pending users available"
+            // ---- Rollover logic: all users are selected ----
+            // Determine the current chit number (all users share the same chitNo)
+            const anyUser = await User.findOne();
+            const currentChitNumber = anyUser ? anyUser.chitNo : 1;
+
+            // Capture a snapshot of all users for history
+            const allUsers = await User.find();
+            const historyEntries = allUsers.map(u => ({
+                userId: u._id,
+                amount: u.amount,
+                status: u.status,
+            }));
+
+            // Save the historical record for this completed chit
+            await ChitCycleHistory.create({
+                chitNumber: currentChitNumber,
+                completedAt: new Date(),
+                users: historyEntries,
+            });
+
+            // Increment chit number and reset users for the next cycle
+            await User.updateMany(
+                {},
+                { $set: { chitNo: currentChitNumber + 1, amount: 0, status: "Pending" } }
+            );
+
+            // Respond indicating the new cycle is ready
+            return res.status(200).json({
+                message: `All users selected. Completed chit ${currentChitNumber} and started chit ${currentChitNumber + 1}.`,
+                newChitNumber: currentChitNumber + 1,
             });
         }
         

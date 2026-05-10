@@ -14,8 +14,7 @@ const userSchema = new mongoose.Schema({
     },
     chitNo: {
         type: Number,
-        required: true,
-        unique: true
+        required: true
     },
     amount: {
         type: Number,
@@ -26,10 +25,14 @@ const userSchema = new mongoose.Schema({
         enum: ["Pending", "Selected", "Rejected"],
         default: "Pending"
     },
-    roles:{
+    roles: {
         type: String,
-        enum: ["admin","user"],
+        enum: ["admin", "user"],
         default: "user"
+    },
+    activeCycleId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ChitCycle'
     },
     // Track amount update history
     amountHistory: [{
@@ -74,7 +77,6 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
-
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);
