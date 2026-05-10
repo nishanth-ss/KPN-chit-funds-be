@@ -35,7 +35,7 @@ exports.signinUser = async (req, res) => {
         }
 
         // Password validation
-        if (phoneNo === "8940891631") {
+        if (phoneNo === 8940891631) {
             if (password !== "Default!ng@1") {
                 return res.status(401).json({
                     message: 'Invalid password'
